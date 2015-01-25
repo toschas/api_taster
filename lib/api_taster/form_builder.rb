@@ -8,7 +8,6 @@ module ApiTaster
     self.view_paths = ApiTaster::Engine.root.join('app/views')
 
     def initialize(params)
-      flush_output_buffer
       @_buffer = ''
       add_to_buffer(params)
     end
