@@ -117,6 +117,43 @@ jQuery(function($) {
     });
   });
 
+  $("#add-header").click(function(e) {
+    e.preventDefault();
+
+    var form = $("#xhr-headers").children().last().clone();
+    splitId = $(form).children().last().attr('id').split('-');
+    id = parseInt(splitId[splitId.length - 1]) + 1;
+
+    $(form).children().last().attr("id", "delete-header-" + id);
+    $("#xhr-headers").append($(form));
+  });
+
+  $("#xhr-headers").on('click', '.remove-header', function(e) {
+    e.preventDefault();
+
+    var children = $("#xhr-headers").children(".form-group").length;
+    if (children > 1) {
+      $(this).parent().remove();
+    }
+  });
+
+  $("#xhr-headers").on('change', 'input[type=checkbox]', function(e) {
+    e.preventDefault();
+
+    var parent = $(this).parent()
+    var header = parent.find(".header");
+    var value = parent.find(".value");
+
+    if(this.checked) {
+      header.prop('disabled', false);
+      value.prop('disabled', false);
+    } else {
+      header.prop('disabled', true);
+      value.prop('disabled', true);
+    }
+  });
+
+
   function onSubmit(e) {
     $form = $(e.target);
     ApiTaster.disableSubmitButton();
@@ -125,6 +162,8 @@ jQuery(function($) {
     window.ajax = $.ajax({
       beforeSend: function(xhr) {
         var headers = ApiTaster.headers;
+        $.merge(headers, resolveCustomHeaders());
+
         for(var l = headers.length, i = 0; i < l; i ++) {
           xhr.setRequestHeader(headers[i].key, headers[i].value);
         }
@@ -139,6 +178,29 @@ jQuery(function($) {
 
     return false;
   }
+
+  function resolveCustomHeaders() {
+    var kids = $("#xhr-headers").children();
+    var headers = [];
+
+    for(var l = kids.length, i = 0; i < l; i++) {
+      var kid = $(kids[i]);
+
+      var checkb = kid.find(".check-header");
+
+      if ($(checkb).is(":checked")) {
+
+        var header = kid.find(".header").val();
+        var value = kid.find(".value").val();
+
+        headers.push({ key: header, value: value });
+
+      }
+    }
+
+    return headers;
+  }
+
 
   function onComplete(xhr, status) {
     ApiTaster.lastRequest.endTime = Date.now();
@@ -163,7 +225,9 @@ jQuery(function($) {
     }
 
     $("#show-api-response-div pre[ref=response-raw]").text(xhr.responseText);
+    ApiTaster.headers = [];
 
     prettyPrint();
   }
+
 });

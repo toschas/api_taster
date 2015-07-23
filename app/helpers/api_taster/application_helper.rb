@@ -8,7 +8,8 @@ module ApiTaster
     end
 
     def headers_js_callback
-      render partial: "api_taster/routes/headers.js", locals: {headers: ApiTaster.global_headers}
+      render partial: "api_taster/routes/headers.js",
+        locals: { headers: ApiTaster.global_headers }
     end
   end
 end
