@@ -7,16 +7,24 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container-fluid">
         <ul class="nav">
-          <li><a class="brand" href="<%= root_path %>">API Taster</a></li>
+          <li><a class="brand" href="<%= root_path %>">
+              <% if ApiTaster.logo -%>
+                <img src="<%= ApiTaster.logo %>" class="logo">
+              <% else -%>
+                <%= ApiTaster.app_name %>
+              <% end %>
+            </a>
+          </li>
         </ul>
         <div class="nav-collapse collapse">
           <ul class="nav pull-right">
             <li>
-              <a href="/" target="_blank"><%= Rails.application.class.name %> <i class="icon-share-alt icon-white"></i></a>
+              <a href="<%= ApiTaster.home_url %>" class="home-url" target="_blank">
+              Home <i class="icon-share-alt"></i></a>
             </li>
           </ul>
         </div>

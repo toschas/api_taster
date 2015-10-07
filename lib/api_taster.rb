@@ -21,6 +21,15 @@ module ApiTaster
   mattr_accessor :global_headers
   self.global_headers = {}
 
+  mattr_accessor :app_name
+  self.app_name = "API Taster"
+
+  mattr_accessor :logo
+  self.logo = nil
+
+  mattr_accessor :home_url
+  self.home_url = "/"
+
   def self.routes(&block)
     ApiTaster::RouteCollector.routes << block
   end
